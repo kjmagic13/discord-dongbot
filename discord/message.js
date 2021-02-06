@@ -13,7 +13,13 @@ module.exports = async (message) => {
 
   if (message.content.toLowerCase().includes('!ct_')) {
     const word = randomRhyme()
-    message.channel.send(`Yo ${users}, Catch this ${word}!`)
+
+    const phrase =
+      word == 'bong'
+        ? `Yo ${users}, Smoke this ${word}!`
+        : `Yo ${users}, Catch this ${word}!`
+
+    message.channel.send(phrase)
 
     return
   }
