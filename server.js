@@ -5,8 +5,6 @@ var path = require('path')
 
 require('./discord')
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname + '/index.html'))
-})
+app.use(express.static('public'))
 
 app.listen(PORT, () => console.log(`Listening on port ${PORT}`))
