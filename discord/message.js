@@ -17,7 +17,7 @@ module.exports = async (message) => {
     const phrase =
       word == 'bong'
         ? `Yo ${users}, Smoke this ${word}!`
-        : `Yo ${users}, Catch this ${word}!`
+        : `Yo ${users}, Catch this ${word} dong!`
 
     message.channel.send(phrase)
 
