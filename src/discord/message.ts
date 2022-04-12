@@ -1,7 +1,9 @@
-// const { MessageEmbed } = require('discord.js')
-// const axios = require('axios')
+import { Message } from 'discord.js'
+import words from '../data/words.json'
+// import { MessageEmbed } from 'discord.js'
+// import axios from 'axios'
 
-module.exports = async (message) => {
+export default function (message: Message): void {
   const users = message.mentions.users.size
     ? message.mentions.users.map((u) => `<@${u.id}>`).join(' ')
     : `<@${message.author.id}>`
@@ -43,7 +45,6 @@ module.exports = async (message) => {
 }
 
 function randomRhyme() {
-  const words = require('../data/words.json')
   const { word } = words[Math.floor(Math.random() * words.length)]
   return word
 }
