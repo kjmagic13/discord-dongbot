@@ -1,15 +1,4 @@
 {
-  "ts-node": {
-    "files": true
-  },
-  "compilerOptions": {
-    "target": "es6",
-    "module": "commonjs",
-    "rootDir": "./",
-    "outDir": "./build",
-    "esModuleInterop": true,
-    "strict": true,
-    "noUnusedLocals": true,
-    "resolveJsonModule": true
-  }
+  // https://nuxt.com/docs/guide/concepts/typescript
+  "extends": "./.nuxt/tsconfig.json"
 }

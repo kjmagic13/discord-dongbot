@@ -1,9 +1,27 @@
-import { Message } from 'discord.js'
-import words from '../data/words.json'
-// import { MessageEmbed } from 'discord.js'
-// import axios from 'axios'
+import { Client, Message } from 'discord.js'
+import words from './words.json'
 
-export default function (message: Message): void {
+const { DISCORD_BOT_TOKEN } = process.env
+
+export default defineNitroPlugin((nitroApp) => {
+  // if (process.env.NODE_ENV === 'development') return
+
+  const client = new Client()
+  client.login(DISCORD_BOT_TOKEN)
+
+  client.once('ready', () => {
+    console.log('Discord ready!')
+  })
+
+  client.on('message', message)
+})
+
+/**
+ *
+ * @param message
+ * @returns
+ */
+async function message(message: Message): Promise<void> {
   const users = message.mentions.users.size
     ? message.mentions.users.map((u) => `<@${u.id}>`).join(' ')
     : `<@${message.author.id}>`
@@ -44,6 +62,10 @@ export default function (message: Message): void {
   }
 }
 
+/**
+ *
+ * @returns
+ */
 function randomRhyme() {
   const { word } = words[Math.floor(Math.random() * words.length)]
   return word
