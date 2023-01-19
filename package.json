@@ -25,6 +25,5 @@
   },
   "dependencies": {
     "discord.js": "^12.5.1"
-  },
-  "packageManager": "yarn@3.3.1"
+  }
 }
