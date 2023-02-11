@@ -13,6 +13,11 @@ export default function (message: Message): void {
     return
   }
 
+  if (message.content.toLowerCase().includes('!stb')) {
+    message.channel.send(`Yo ${users}, Smoke this Bong!`)
+    return
+  }
+
   if (message.content.toLowerCase().includes('!ct_')) {
     const word = randomRhyme()
 
