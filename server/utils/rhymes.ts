@@ -147,3 +147,9 @@ export const rhymingWords = [
   { word: "yongue", numSyllables: 1 },
   { word: "yuzong", numSyllables: 2 },
 ];
+
+export function useRandomRhyme() {
+  const { word } =
+    rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
+  return word;
+}

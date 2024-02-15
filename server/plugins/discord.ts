@@ -102,13 +102,7 @@ export default defineNitroPlugin(async ({ localFetch }) => {
         .setDescription("Replies with an inspirational quote!")
         .addMentionableOption(useMentionOption),
       async execute(interaction) {
-        const quote = await (
-          await localFetch("/api/inspire", {
-            headers: {
-              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-            },
-          })
-        ).text();
+        const quote = await fetchInspirationalQuote();
         await interaction.reply(`${useMentioned(interaction)}, ${quote}`);
       },
     },
@@ -178,14 +172,4 @@ function useMentionOption(option: SlashCommandMentionableOption) {
     .setName("mention")
     .setDescription("Who to mention.")
     .setRequired(true);
-}
-
-/**
- *
- * @returns
- */
-function useRandomRhyme() {
-  const { word } =
-    rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
-  return word;
 }
