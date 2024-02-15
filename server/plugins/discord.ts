@@ -8,19 +8,6 @@ import {
   SlashCommandMentionableOption,
 } from "discord.js";
 
-type ICommands = Record<
-  string,
-  {
-    data:
-      | SlashCommandBuilder
-      | Omit<SlashCommandBuilder, "addSubcommand" | "addSubcommandGroup">;
-    execute: (i: ChatInputCommandInteraction) => Promise<void>;
-  }
->;
-
-/**
- * handler
- */
 export default defineNitroPlugin(async ({ localFetch }) => {
   //
   const commands: ICommands = {
@@ -108,19 +95,23 @@ export default defineNitroPlugin(async ({ localFetch }) => {
       },
     },
 
-    // //
-    // quote: {
-    //   data: new SlashCommandBuilder()
-    //     .setName("quote")
-    //     .setDescription("Replies with an inspirational quote!")
-    //     .addMentionableOption(useMentionOption),
-    //   async execute(interaction, user) {
-    //     const quote = await (
-    //       await localFetch("/api/quote", {})
-    //     ).text();
-    //     await interaction.reply(`${useMentioned(interaction)}, ${quote}`);
-    //   },
-    // },
+    //
+    inspire: {
+      data: new SlashCommandBuilder()
+        .setName("inspire")
+        .setDescription("Replies with an inspirational quote!")
+        .addMentionableOption(useMentionOption),
+      async execute(interaction) {
+        const quote = await (
+          await localFetch("/api/inspire", {
+            headers: {
+              Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+            },
+          })
+        ).text();
+        await interaction.reply(`${useMentioned(interaction)}, ${quote}`);
+      },
+    },
   };
 
   //
@@ -142,6 +133,8 @@ export default defineNitroPlugin(async ({ localFetch }) => {
  * @returns
  */
 async function initDiscord(commands: ICommands) {
+  if (import.meta.dev) return;
+
   const { DISCORD_CLIENT_TOKEN, DISCORD_BOT_TOKEN } = process.env;
   if (!DISCORD_CLIENT_TOKEN || !DISCORD_BOT_TOKEN) return;
 
