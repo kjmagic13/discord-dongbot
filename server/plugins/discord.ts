@@ -60,7 +60,7 @@ export default defineNitroPlugin(async ({ localFetch }) => {
           shaft += "=";
         }
         await interaction.reply(
-          `B${shaft}D ${useMentioned(interaction)} ||${size}||`
+          `B${shaft}D :sweat_drops: ${useMentioned(interaction)} ||${size}||`
         );
       },
     },
