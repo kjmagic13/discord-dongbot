@@ -8,4 +8,8 @@ export default defineNuxtConfig({
       posthogHost: "https://app.posthog.com",
     },
   },
+
+  routeRules: {
+    "/ingest/**": { proxy: "https://app.posthog.com/**" },
+  },
 });
