@@ -7,8 +7,15 @@ import {
   ChatInputCommandInteraction,
   SlashCommandMentionableOption,
 } from "discord.js";
+import { PostHog } from "posthog-node";
 
 export default defineNitroPlugin(async ({ localFetch }) => {
+  //
+  const runtimeConfig = useRuntimeConfig();
+  const posthog = new PostHog(runtimeConfig.public.posthogPublicKey, {
+    host: runtimeConfig.public.posthogHost,
+  });
+
   //
   const commands: ICommands = {
     // //
@@ -116,6 +123,13 @@ export default defineNitroPlugin(async ({ localFetch }) => {
     client.on("interactionCreate", async (interaction) => {
       if (!interaction.isChatInputCommand()) return;
       await commands[interaction.commandName].execute(interaction);
+
+      //
+      posthog.capture({
+        distinctId: interaction.user.id,
+        event: `discord_slash_command_${interaction.commandName}`,
+      });
+      await posthog.shutdownAsync();
     });
   } catch (error) {
     console.error(error);

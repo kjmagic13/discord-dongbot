@@ -13,6 +13,8 @@
     "discord.js": "^14.14.1",
     "nuxt": "^3.10.2",
     "openai": "^4.28.0",
+    "posthog-js": "^1.106.0",
+    "posthog-node": "^3.6.3",
     "vue": "^3.4.19",
     "vue-router": "^4.2.5"
   }
