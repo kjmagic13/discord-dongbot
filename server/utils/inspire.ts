@@ -1,31 +1,31 @@
+import OpenAi from "openai";
+
 export async function fetchInspirationalQuote() {
-  const system = `You are an inspirational quote generator. Keep your response less than 400 characters and include only the quote, nothing else. Use the following format: "the quote"`;
+  const system = `You are an inspirational quote generator that always has the word Dong in the quote. Use the following format: "the Dong quote"`;
   const prompt = `provide a random quote that has the word Dong in it`;
 
   const errorMessage = "Unable to generate a quote at this time";
 
+  const client = new OpenAi({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+
   try {
-    const res = await fetch(`https://api.openai.com/v1/chat/completions`, {
-      method: "POST",
+    const chatCompletion = await client.chat.completions.create({
+      messages: [
+        { role: "system", content: system },
+        { role: "user", content: prompt },
+      ],
 
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: system },
-          { role: "user", content: prompt },
-        ],
-        temperature: 0.7,
-      }),
+      model: "gpt-3.5-turbo",
+      temperature: 1.5,
+      stream: false,
+      max_tokens: 100,
+      frequency_penalty: 1,
+      presence_penalty: 1,
     });
 
-    const data: IGptResponse | null = await res.json();
-
-    return data?.choices?.[0]?.message?.content ?? errorMessage;
+    return chatCompletion.choices[0].message.content ?? errorMessage;
   } catch (error) {
     console.log(error);
     return `Error: ${errorMessage}`;
