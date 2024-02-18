@@ -126,7 +126,7 @@ export default defineNitroPlugin(async ({ localFetch }) => {
 
       //
       posthog.capture({
-        distinctId: interaction.user.id,
+        distinctId: interaction.user.displayName,
         event: `discord_slash_command_${interaction.commandName}`,
       });
       await posthog.shutdownAsync();
