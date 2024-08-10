@@ -12,3 +12,7 @@ type ICommands = Record<
     ) => Promise<void>;
   }
 >;
+
+type InteractionRequest = {
+  type: number;
+};

@@ -1,7 +1,3 @@
-type InteractionRequest = {
-  type: number;
-};
-
 export default defineEventHandler(async (event) => {
   await validateDiscordInteraction(event);
 
