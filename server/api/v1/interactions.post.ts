@@ -3,12 +3,12 @@ type InteractionRequest = {
 };
 
 export default defineEventHandler(async (event) => {
-  const _body = await readBody(event);
-  console.log("ping", _body);
+  const { error, body, signature, timestamp } =
+    await validateDiscordInteraction<Maybe<InteractionRequest>>(event);
 
-  const { body } = await validateDiscordInteraction<Maybe<InteractionRequest>>(
-    event
-  );
+  console.log("ping", { body, signature, timestamp });
+
+  if (!!error) return error;
 
   /**
    * ping
@@ -19,4 +19,11 @@ export default defineEventHandler(async (event) => {
       type: 1,
     };
   }
+
+  return {
+    type: 4,
+    data: {
+      content: "Hello world!",
+    },
+  };
 });
