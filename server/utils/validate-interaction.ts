@@ -14,6 +14,8 @@ export async function validateDiscordInteraction<T = any>(event: H3Event) {
     Buffer.from(DISCORD_PUBLIC_KEY ?? "", "hex")
   );
 
+  console.log({ body, signature, timestamp, isVerified });
+
   if (!isVerified) {
     throw createError({
       statusCode: 401,
