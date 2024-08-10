@@ -13,10 +13,10 @@ export default defineEventHandler(async (event) => {
     };
   }
 
-  return {
-    type: 4,
-    data: {
-      content: "Hello world!",
-    },
-  };
+  // return {
+  //   type: 4,
+  //   data: {
+  //     content: "Hello world!",
+  //   },
+  // };
 });
