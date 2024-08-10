@@ -1,7 +1,5 @@
 type InteractionRequest = {
-  request: {
-    json: { type: number };
-  };
+  type: number;
 };
 
 export default defineEventHandler(async (event) => {
@@ -15,7 +13,7 @@ export default defineEventHandler(async (event) => {
   /**
    * ping
    */
-  if (body?.request?.json?.type == 1) {
+  if (body?.type == 1) {
     console.log("pong");
     return {
       type: 1,
