@@ -6,6 +6,8 @@ export default defineEventHandler(async (event) => {
 
   const body = await readBody<Maybe<DiscordInteraction.Request>>(event);
 
+  console.log({ body });
+
   /**
    * ping
    */
@@ -21,6 +23,7 @@ export default defineEventHandler(async (event) => {
    */
   if (body?.type == 2) {
     const command = Command.find(body.data.name);
+    console.log({ command });
 
     return {
       type: 4,
