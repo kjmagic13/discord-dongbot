@@ -1,4 +1,5 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, userMention } from "discord.js";
+import { useRandomRhyme } from "~/server/utils/rhymes";
 
 type CommandNames = "b" | "ctd" | "ct_" | "stb";
 
@@ -122,9 +123,9 @@ export class Interaction {
   }
 
   get mentioned(): string {
-    return (
-      (this.options.get("mention")?.value as string) ?? this.member.user.id
-    );
+    const id =
+      (this.options.get("mention")?.value as string) ?? this.member.user.id;
+    return userMention(id);
   }
 }
 
