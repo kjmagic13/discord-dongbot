@@ -1,5 +1,5 @@
 import { SlashCommandBuilder, userMention } from "discord.js";
-import { useRandomRhyme } from "~/server/utils/rhymes";
+import { useRandomRhyme } from "./rhymes";
 
 type CommandNames = "b" | "ctd" | "ct_" | "stb";
 
