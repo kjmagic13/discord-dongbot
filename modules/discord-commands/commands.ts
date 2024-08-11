@@ -1,4 +1,9 @@
-import { SlashCommandBuilder, userMention } from "discord.js";
+import {
+  SlashCommandBuilder,
+  userMention,
+  roleMention,
+  channelMention,
+} from "discord.js";
 import { useRandomRhyme } from "./rhymes";
 
 type CommandNames = "b" | "ctd" | "ct_" | "stb";
@@ -112,19 +117,24 @@ export class Command {
  *
  */
 export class Interaction {
+  private request: DiscordInteraction.Request;
   options: InteractionOptions;
-  private commandName: string;
-  private member: DiscordInteraction.Member;
 
   constructor(body: DiscordInteraction.Request) {
-    this.options = new InteractionOptions(body.data.options);
-    this.commandName = body.data.name;
-    this.member = body.member;
+    this.request = body;
+    this.options = new InteractionOptions(this.request.data.options);
+  }
+
+  get member() {
+    return this.request.member;
   }
 
   get mentioned(): string {
     const id =
       (this.options.get("mention")?.value as string) ?? this.member.user.id;
+
+    if (!!this.request.data.resolved.roles) return roleMention(id);
+
     return userMention(id);
   }
 }

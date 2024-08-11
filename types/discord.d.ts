@@ -63,14 +63,11 @@ namespace DiscordInteraction {
   }
 
   interface Resolved {
-    roles: Roles;
+    roles?: Record<string, Role>;
+    members?: Record<string, Member>;
   }
 
-  interface Roles {
-    "": GeneratedType;
-  }
-
-  interface GeneratedType {
+  interface Role {
     color: number;
     description: any;
     flags: number;
