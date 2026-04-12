@@ -10,12 +10,14 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
     "discord-interactions": "^4.0.0",
     "discord.js": "^14.14.1",
     "nuxt": "^3.10.2",
     "openai": "^4.28.0",
     "posthog-js": "^1.106.0",
     "posthog-node": "^3.6.3",
+    "tailwindcss": "^4.2.2",
     "vue": "^3.4.19",
     "vue-router": "^4.2.5"
   }
