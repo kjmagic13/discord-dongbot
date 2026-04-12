@@ -18,7 +18,7 @@ useSeoMeta({
 </script>
 
 <template>
-  <article class="my-15">
+  <article class="my-15 px-5">
     <ContentRenderer
       v-if="page"
       :value="page"
