@@ -1,4 +1,4 @@
-import { Command } from "~/modules/discord-commands/commands";
+import { Command } from "~~/modules/discord-commands/commands";
 // import { PostHog } from "posthog-node";
 
 export default defineEventHandler(async (event) => {

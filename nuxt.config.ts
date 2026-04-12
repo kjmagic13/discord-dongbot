@@ -12,4 +12,8 @@ export default defineNuxtConfig({
   routeRules: {
     "/ingest/**": { proxy: "https://app.posthog.com/**" },
   },
+
+  future: {
+    compatibilityVersion: 4,
+  },
 });
