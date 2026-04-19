@@ -11,9 +11,20 @@ if (!page.value) {
   });
 }
 
+const url = useRequestURL();
+
 useSeoMeta({
   title: page.value?.title,
   description: page.value?.description,
+  ogImage: `${url.origin}/images/f2ef929c-1905-4e94-8966-4e9df2c87d9f.jpg`,
+  twitterImage: `${url.origin}/images/f2ef929c-1905-4e94-8966-4e9df2c87d9f.jpg`,
+  ogTitle: page.value?.title,
+  ogDescription: page.value?.description,
+  ogUrl: url.toString(),
+  twitterTitle: page.value?.title,
+  twitterDescription: page.value?.description,
+  ogImageHeight: 512,
+  ogImageWidth: 512,
 });
 </script>
 
