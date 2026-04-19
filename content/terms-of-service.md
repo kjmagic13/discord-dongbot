@@ -1,5 +1,5 @@
 ---
-title: "Terms of Service"
+title: "Terms of Service | DongBot"
 description: "Terms of Service for Dongbot"
 ---
 
@@ -39,12 +39,15 @@ Server administrators are responsible for ensuring the bot is used appropriately
 ## 4. Data Collection & Privacy
 
 ### Bot Interactions
+
 When you use a slash command, Discord transmits interaction data to Dongbot's servers for the purpose of generating a response. This includes your Discord user ID and any options provided to the command (e.g., a mentioned user or role ID). This data is used solely to fulfill the command request and is not persistently stored.
 
 ### Website Analytics
+
 The Dongbot companion website uses [PostHog](https://posthog.com) to collect anonymous page view analytics. This may include pages visited and general usage patterns. No personally identifiable information is intentionally collected through analytics.
 
 ### Third-Party Services
+
 Certain features (such as AI-generated quotes) are powered by third-party APIs (OpenAI). Requests to these services contain only the prompt text and no user-identifying information.
 
 ---

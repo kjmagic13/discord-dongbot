@@ -1,5 +1,5 @@
 ---
-title: "Privacy Policy"
+title: "Privacy Policy | DongBot"
 description: "Privacy policy for DongBot"
 ---
 
@@ -12,7 +12,9 @@ This Privacy Policy describes how DongBot ("the Bot", "we", "us") handles inform
 ## What We Collect
 
 ### Discord Interactions
+
 When you use a DongBot slash command, Discord sends us the interaction payload. This includes:
+
 - Your Discord user ID (the command invoker)
 - The Discord user ID or role ID you mention in the command
 - The server (guild) ID where the command was used
@@ -20,7 +22,9 @@ When you use a DongBot slash command, Discord sends us the interaction payload. 
 This data is used only to generate and return the Bot's response. It is not stored, logged, or retained after the interaction is complete.
 
 ### Website Analytics
+
 The dongbot.net website uses [PostHog](https://posthog.com) to collect anonymous analytics, including:
+
 - Pages visited
 - Referring URLs
 - General browser and device information
@@ -37,11 +41,11 @@ No personally identifiable information is associated with these analytics events
 
 DongBot uses the following third-party services:
 
-| Service | Purpose | Privacy Policy |
-|---|---|---|
-| Discord | Bot platform | [discord.com/privacy](https://discord.com/privacy) |
-| OpenAI | Generating inspirational quotes | [openai.com/policies/privacy-policy](https://openai.com/policies/privacy-policy) |
-| PostHog | Website analytics | [posthog.com/privacy](https://posthog.com/privacy) |
+| Service | Purpose                         | Privacy Policy                                                                   |
+| ------- | ------------------------------- | -------------------------------------------------------------------------------- |
+| Discord | Bot platform                    | [discord.com/privacy](https://discord.com/privacy)                               |
+| OpenAI  | Generating inspirational quotes | [openai.com/policies/privacy-policy](https://openai.com/policies/privacy-policy) |
+| PostHog | Website analytics               | [posthog.com/privacy](https://posthog.com/privacy)                               |
 
 When a quote is generated, a prompt is sent to OpenAI. No user-specific data is included in that request.
 
