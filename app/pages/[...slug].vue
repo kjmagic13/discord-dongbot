@@ -18,12 +18,12 @@ useSeoMeta({
 </script>
 
 <template>
-  <article class="my-15 px-5">
+  <article :class="page?.prose ? 'my-15 px-5' : undefined">
     <ContentRenderer
       v-if="page"
       :value="page"
-      prose
-      class="mx-auto prose dark:prose-invert"
+      :prose="page.prose"
+      :class="page.prose ? 'mx-auto prose dark:prose-invert' : undefined"
     />
     <div v-else>Page not found</div>
   </article>

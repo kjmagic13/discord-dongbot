@@ -1,25 +1,15 @@
-<script setup lang="ts">
-useHead({
-  title: "DongBot",
-  meta: [
-    {
-      name: "description",
-      content:
-        "DongBot: the free, open-source Discord bot for server shenanigans. Generate dongs and more — install in seconds.",
-    },
-  ],
-});
-</script>
+<script setup lang="ts"></script>
 
 <template>
   <!-- ── HERO ── -->
   <section class="hero">
     <div class="hero-image-wrap">
       <div class="hero-image-glow"></div>
-      <img
+      <NuxtImg
         src="/images/f2ef929c-1905-4e94-8966-4e9df2c87d9f.jpg"
         class="hero-image"
         alt="DongBot avatar"
+        width="200"
       />
     </div>
 
