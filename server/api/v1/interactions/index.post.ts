@@ -2,10 +2,8 @@ import { Command } from "~~/modules/discord-commands/commands";
 // import { PostHog } from "posthog-node";
 
 export default defineEventHandler(async (event) => {
-  await validateDiscordInteraction(event);
-
-  const body = await readBody<Maybe<DiscordInteraction.Request>>(event);
-  console.log({ body });
+  const body = await validateDiscordInteraction(event);
+  if (import.meta.dev) console.log({ body });
 
   /**
    * ping
