@@ -6,13 +6,13 @@ import {
 } from "discord.js";
 import { useRandomRhyme } from "./rhymes";
 
-type CommandNames = "b" | "ctd" | "ct_" | "stb";
+type CommandNames = "b" | "ctd" | "ct_" | "stb" | "inspire";
 
 type TCommand = {
   name: CommandNames;
   description: string;
   builder?: (b: CustomSlashBuilder) => CustomSlashBuilder;
-  resolver: (i: Interaction) => Promise<string>;
+  resolver: (i: Interaction) => string | Promise<string>;
 };
 
 /**
@@ -22,27 +22,29 @@ export class Command {
   name: CommandNames;
   description: string;
   builder: CustomSlashBuilder;
-  private resolver: (i: Interaction) => Promise<string>;
+  private resolver: (i: Interaction) => string | Promise<string>;
 
   constructor({ name, description, builder, resolver }: TCommand) {
     this.name = name;
     this.description = description;
     this.resolver = resolver;
 
-    const defaultBuilder = new SlashCommandBuilder()
+    const defaultBuilder = new SlashCommandBuilder();
+
+    defaultBuilder
       .setName(this.name)
       .setDescription(this.description)
       .addMentionableOption((option) =>
         option
           .setName("mention")
           .setDescription("Who to mention.")
-          .setRequired(true)
+          .setRequired(true),
       );
 
     this.builder = builder?.(defaultBuilder) ?? defaultBuilder;
   }
 
-  async resolve(i: DiscordInteraction.Request) {
+  async resolve(i: DiscordInteraction.Request): Promise<string> {
     const interaction = new Interaction(i);
     return await this.resolver(interaction);
   }
@@ -61,25 +63,21 @@ export class Command {
       new Command({
         name: "b",
         description: "Give em the B!",
-        builder: (b) =>
+        builder: (b) => {
           b.addIntegerOption((option) =>
             option
               .setName("size")
               .setDescription("The size of the shaft.")
               .setRequired(true)
               .setMinValue(1)
-              .setMaxValue(99)
-          ),
-        resolver: async (i) => {
-          const sizeOption = i.options.get("size");
-          let size = (sizeOption?.value as number) ?? 7;
-          if (size < 1 || size > 100) {
-            size = 7;
-          }
-          let shaft = "";
-          for (let index = 0; index < size; index++) {
-            shaft += "=";
-          }
+              .setMaxValue(99),
+          );
+          return b;
+        },
+        resolver: (i) => {
+          const parsedSize = parseInt(i.options.get("size")?.value) || 7;
+          const size = Math.max(1, Math.min(100, parsedSize));
+          const shaft = "=".repeat(size);
           return `B${shaft}D :sweat_drops: ${i.mentioned} ||${size}||`;
         },
       }),
@@ -88,14 +86,14 @@ export class Command {
       new Command({
         name: "ctd",
         description: "Replies with Catch this Dong!",
-        resolver: async (i) => `Yo ${i.mentioned}, Catch this Dong!`,
+        resolver: (i) => `Yo ${i.mentioned}, Catch this Dong!`,
       }),
 
       // ct_
       new Command({
         name: "ct_",
         description: "Replies with Catch this {rhyme}!",
-        resolver: async (i) => {
+        resolver: (i) => {
           const word = useRandomRhyme();
           return word == "bong"
             ? `Yo ${i.mentioned}, Smoke this Bong!`
@@ -106,8 +104,18 @@ export class Command {
       // stb
       new Command({
         name: "stb",
-        description: "Replies with Catch this Dong!",
-        resolver: async (i) => `Yo ${i.mentioned}, Smoke this Bong!`,
+        description: "Replies with Smoke this Bong!",
+        resolver: (i) => `Yo ${i.mentioned}, Smoke this Bong!`,
+      }),
+
+      // inspire
+      new Command({
+        name: "inspire",
+        description: "Replies with an inspirational quote",
+        resolver: async (i) => {
+          const quote = await fetchInspirationalQuote();
+          return `> ${quote}\n— ${i.mentioned}`;
+        },
       }),
     ];
   }
