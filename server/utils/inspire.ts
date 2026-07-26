@@ -6,16 +6,16 @@ export async function fetchInspirationalQuote() {
 
   const errorMessage = "Unable to generate a quote at this time";
 
-  const { openAi: config } = useRuntimeConfig();
+  const { openaiApiKey, openaiApiBaseUrl, openaiModel } = useRuntimeConfig();
 
   const client = new OpenAi({
-    apiKey: config.apiKey,
-    baseURL: config.apiBaseUrl,
+    apiKey: openaiApiKey,
+    baseURL: openaiApiBaseUrl,
   });
 
   try {
     const chatCompletion = await client.chat.completions.create({
-      model: config.model,
+      model: openaiModel,
 
       messages: [
         { role: "system", content: system },

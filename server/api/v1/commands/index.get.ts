@@ -2,8 +2,8 @@ import { getCommands } from "~~/modules/discord-commands/utils";
 
 export default defineCachedEventHandler(
   async () => {
-    const { discord } = useRuntimeConfig();
-    return await getCommands(discord);
+    const { discordBotToken, discordClientToken } = useRuntimeConfig();
+    return await getCommands({ discordBotToken, discordClientToken });
   },
   {
     maxAge: 60 * 60,

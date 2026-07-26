@@ -4,7 +4,7 @@ import { H3Event } from "h3";
 export async function validateDiscordInteraction<
   T = Maybe<DiscordInteraction.Request>,
 >(event: H3Event) {
-  const { discord: config } = useRuntimeConfig();
+  const { discordPublicKey } = useRuntimeConfig();
 
   const body = await readRawBody(event);
   const signature = getHeader(event, "X-Signature-Ed25519");
@@ -14,7 +14,7 @@ export async function validateDiscordInteraction<
     body ?? "",
     signature ?? "",
     timestamp ?? "",
-    config.publicKey,
+    discordPublicKey,
   );
 
   if (import.meta.dev) console.log({ body, signature, timestamp, isVerified });

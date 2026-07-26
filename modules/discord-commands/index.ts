@@ -7,8 +7,10 @@ export default defineNuxtModule({
      * sends updated command definitions to Discord on `build:before`
      */
     nuxt.hook("build:before", async () => {
-      const { discord } = nuxt.options.runtimeConfig;
-      await putCommands(discord);
+      await putCommands({
+        discordBotToken: process.env.NUXT_DISCORD_BOT_TOKEN || "",
+        discordClientToken: process.env.NUXT_DISCORD_CLIENT_TOKEN || "",
+      });
     });
   },
 });
