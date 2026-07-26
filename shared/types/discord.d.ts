@@ -1,12 +1,3 @@
-type CustomSlashBuilder =
-  | import("discord.js").SlashCommandBuilder
-  | Omit<
-      import("discord.js").SlashCommandBuilder,
-      "addSubcommand" | "addSubcommandGroup"
-    >;
-
-type CustomPreSlashBuilder = Omit<CustomSlashBuilder, "setName">;
-
 namespace DiscordInteraction {
   interface Request {
     app_permissions: string;
@@ -51,8 +42,10 @@ namespace DiscordInteraction {
   interface Data {
     id: string;
     name: string;
-    options: Option[];
-    resolved: Resolved;
+    /** Omitted entirely when the command is invoked with no arguments. */
+    options?: Option[];
+    /** Omitted entirely when no option resolves to a Discord entity. */
+    resolved?: Resolved;
     type: number;
   }
 
@@ -65,6 +58,7 @@ namespace DiscordInteraction {
   interface Resolved {
     roles?: Record<string, Role>;
     members?: Record<string, Member>;
+    users?: Record<string, User>;
   }
 
   interface Role {

@@ -1,4 +1,4 @@
-import { Command } from "~~/modules/discord-commands/commands";
+import { resolveCommand } from "~~/modules/discord-commands/commands";
 // import { PostHog } from "posthog-node";
 
 export default defineEventHandler(async (event) => {
@@ -19,12 +19,10 @@ export default defineEventHandler(async (event) => {
    * slash command
    */
   if (body?.type == 2) {
-    const command = Command.find(body.data.name);
-
     return {
       type: 4,
       data: {
-        content: await command?.resolve(body),
+        content: await resolveCommand(body),
       },
     };
   }

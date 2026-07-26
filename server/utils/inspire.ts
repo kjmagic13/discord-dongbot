@@ -24,6 +24,7 @@ export async function fetchInspirationalQuote() {
 
       stream: false,
       max_tokens: 100,
+      temperature: 0.5,
     });
 
     return chatCompletion.choices[0]?.message.content ?? errorMessage;

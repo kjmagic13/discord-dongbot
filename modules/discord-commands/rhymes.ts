@@ -150,6 +150,6 @@ export const rhymingWords = [
 
 export function useRandomRhyme() {
   const { word } =
-    rhymingWords[Math.floor(Math.random() * rhymingWords.length)];
+    rhymingWords[Math.floor(Math.random() * rhymingWords.length)]!;
   return word;
 }
