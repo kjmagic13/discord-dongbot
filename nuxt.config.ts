@@ -14,9 +14,17 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      posthogPublicKey: "phc_EPsG8N8S8FMBUfTgeNsqUlYW9leCxH12cZQ14JLPtrc",
+      posthogPublicKey: "",
       posthogHost: "https://app.posthog.com",
     },
+
+    discordClientToken: "",
+    discordPublicKey: "",
+    discordBotToken: "",
+
+    openaiApiKey: "",
+    openaiApiBaseUrl: "",
+    openaiModel: "",
   },
 
   routeRules: {

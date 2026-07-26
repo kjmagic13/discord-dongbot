@@ -1,9 +1,11 @@
 import { verifyKey } from "discord-interactions";
 import { H3Event } from "h3";
 
-const { DISCORD_PUBLIC_KEY } = process.env;
+export async function validateDiscordInteraction<
+  T = Maybe<DiscordInteraction.Request>,
+>(event: H3Event) {
+  const { discordPublicKey } = useRuntimeConfig();
 
-export async function validateDiscordInteraction<T = any>(event: H3Event) {
   const body = await readRawBody(event);
   const signature = getHeader(event, "X-Signature-Ed25519");
   const timestamp = getHeader(event, "X-Signature-Timestamp");
@@ -12,10 +14,10 @@ export async function validateDiscordInteraction<T = any>(event: H3Event) {
     body ?? "",
     signature ?? "",
     timestamp ?? "",
-    DISCORD_PUBLIC_KEY ?? ""
+    discordPublicKey,
   );
 
-  console.log({ body, signature, timestamp, isVerified });
+  if (import.meta.dev) console.log({ body, signature, timestamp, isVerified });
 
   if (!isVerified) {
     throw createError({
@@ -23,4 +25,6 @@ export async function validateDiscordInteraction<T = any>(event: H3Event) {
       message: "invalid request signature",
     });
   }
+
+  return await readBody<T>(event);
 }

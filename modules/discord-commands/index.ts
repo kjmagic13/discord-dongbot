@@ -1,18 +1,15 @@
 import { defineNuxtModule } from "@nuxt/kit";
-import { REST, Routes } from "discord.js";
-import { Command } from "./commands";
-
-const { DISCORD_CLIENT_TOKEN, DISCORD_BOT_TOKEN } = process.env;
+import { putCommands } from "./utils";
 
 export default defineNuxtModule({
   setup(_options, nuxt) {
+    /**
+     * sends updated command definitions to Discord on `build:before`
+     */
     nuxt.hook("build:before", async () => {
-      if (!DISCORD_CLIENT_TOKEN || !DISCORD_BOT_TOKEN) return;
-
-      const rest = new REST({ version: "10" }).setToken(DISCORD_BOT_TOKEN);
-
-      await rest.put(Routes.applicationCommands(DISCORD_CLIENT_TOKEN), {
-        body: Command.builders,
+      await putCommands({
+        discordBotToken: process.env.NUXT_DISCORD_BOT_TOKEN || "",
+        discordClientToken: process.env.NUXT_DISCORD_CLIENT_TOKEN || "",
       });
     });
   },

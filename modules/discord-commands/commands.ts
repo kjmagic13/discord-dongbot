@@ -1,155 +1,104 @@
-import {
-  SlashCommandBuilder,
-  userMention,
-  roleMention,
-  channelMention,
-} from "discord.js";
+import { Interaction } from "./interaction";
+import { buildSlashCommand, type CommandDefinition } from "./builder";
 import { useRandomRhyme } from "./rhymes";
 
-type CommandNames = "b" | "ctd" | "ct_" | "stb";
+/** Shared by the `/b` option spec and its resolver so the two can't drift. */
+const B_SHAFT_SIZE = { min: 1, max: 99, fallback: 7 };
 
-type TCommand = {
-  name: CommandNames;
-  description: string;
-  builder?: (b: CustomSlashBuilder) => CustomSlashBuilder;
-  resolver: (i: Interaction) => Promise<string>;
-};
+const definitions = [
+  {
+    name: "b",
+    description: "Give em the B!",
+    options: [
+      ({ mentionable }) => mentionable(),
+      ({ builder }) =>
+        builder.addIntegerOption((o) =>
+          o
+            .setName("size")
+            .setDescription("The size of the shaft.")
+            .setRequired(true)
+            .setMinValue(B_SHAFT_SIZE.min)
+            .setMaxValue(B_SHAFT_SIZE.max),
+        ),
+    ],
+    resolve: (i) => {
+      const parsedSize =
+        parseInt(i.options.find("size")?.value) || B_SHAFT_SIZE.fallback;
 
-/**
- *
- */
-export class Command {
-  name: CommandNames;
-  description: string;
-  builder: CustomSlashBuilder;
-  private resolver: (i: Interaction) => Promise<string>;
-
-  constructor({ name, description, builder, resolver }: TCommand) {
-    this.name = name;
-    this.description = description;
-    this.resolver = resolver;
-
-    const defaultBuilder = new SlashCommandBuilder()
-      .setName(this.name)
-      .setDescription(this.description)
-      .addMentionableOption((option) =>
-        option
-          .setName("mention")
-          .setDescription("Who to mention.")
-          .setRequired(true)
+      const size = Math.max(
+        B_SHAFT_SIZE.min,
+        Math.min(B_SHAFT_SIZE.max, parsedSize),
       );
 
-    this.builder = builder?.(defaultBuilder) ?? defaultBuilder;
-  }
+      const shaft = "=".repeat(size);
 
-  async resolve(i: DiscordInteraction.Request) {
-    const interaction = new Interaction(i);
-    return await this.resolver(interaction);
-  }
+      return `B${shaft}D :sweat_drops: ${i.mentioned} ||${size}||`;
+    },
+  },
 
-  static find(name: string) {
-    return this.all.find((x) => x.name === name);
-  }
+  {
+    name: "ctd",
+    description: "Replies with Catch this Dong!",
+    options: [({ mentionable }) => mentionable()],
+    resolve: (i) => `Yo ${i.mentioned}, Catch this Dong!`,
+  },
 
-  static get builders() {
-    return Object.values(Command.all).map((c) => c.builder);
-  }
+  {
+    name: "ct_",
+    description: "Replies with Catch this {rhyme}!",
+    options: [({ mentionable }) => mentionable()],
+    resolve: (i) => {
+      const word = useRandomRhyme();
 
-  static get all(): Command[] {
-    return [
-      // b
-      new Command({
-        name: "b",
-        description: "Give em the B!",
-        builder: (b) =>
-          b.addIntegerOption((option) =>
-            option
-              .setName("size")
-              .setDescription("The size of the shaft.")
-              .setRequired(true)
-              .setMinValue(1)
-              .setMaxValue(99)
-          ),
-        resolver: async (i) => {
-          const sizeOption = i.options.get("size");
-          let size = (sizeOption?.value as number) ?? 7;
-          if (size < 1 || size > 100) {
-            size = 7;
-          }
-          let shaft = "";
-          for (let index = 0; index < size; index++) {
-            shaft += "=";
-          }
-          return `B${shaft}D :sweat_drops: ${i.mentioned} ||${size}||`;
-        },
-      }),
+      return word == "bong"
+        ? `Yo ${i.mentioned}, Smoke this Bong!`
+        : `Yo ${i.mentioned}, Catch this ${word} dong!`;
+    },
+  },
 
-      //ctd
-      new Command({
-        name: "ctd",
-        description: "Replies with Catch this Dong!",
-        resolver: async (i) => `Yo ${i.mentioned}, Catch this Dong!`,
-      }),
+  {
+    name: "stb",
+    description: "Replies with Smoke this Bong!",
+    options: [({ mentionable }) => mentionable()],
+    resolve: (i) => `Yo ${i.mentioned}, Smoke this Bong!`,
+  },
 
-      // ct_
-      new Command({
-        name: "ct_",
-        description: "Replies with Catch this {rhyme}!",
-        resolver: async (i) => {
-          const word = useRandomRhyme();
-          return word == "bong"
-            ? `Yo ${i.mentioned}, Smoke this Bong!`
-            : `Yo ${i.mentioned}, Catch this ${word} dong!`;
-        },
-      }),
+  {
+    name: "inspire",
+    description: "Replies with an inspirational quote",
+    options: [({ mentionable }) => mentionable({ required: false })],
+    resolve: async (i) => {
+      const quote = await fetchInspirationalQuote();
 
-      // stb
-      new Command({
-        name: "stb",
-        description: "Replies with Catch this Dong!",
-        resolver: async (i) => `Yo ${i.mentioned}, Smoke this Bong!`,
-      }),
-    ];
-  }
-}
+      return `> ${quote}\n— ${i.mentioned}`;
+    },
+  },
+] as const satisfies readonly CommandDefinition[];
 
 /**
  *
  */
-export class Interaction {
-  private request: DiscordInteraction.Request;
-  options: InteractionOptions;
-
-  constructor(body: DiscordInteraction.Request) {
-    this.request = body;
-    this.options = new InteractionOptions(this.request.data.options);
-  }
-
-  get member() {
-    return this.request.member;
-  }
-
-  get mentioned(): string {
-    const id =
-      (this.options.get("mention")?.value as string) ?? this.member.user.id;
-
-    if (!!this.request.data.resolved.roles) return roleMention(id);
-
-    return userMention(id);
-  }
-}
+export const commands = definitions.map(buildSlashCommand);
 
 /**
  *
+ * @param name
+ * @returns
  */
-export class InteractionOptions {
-  private _options: DiscordInteraction.Option[];
+export function findCommand(
+  name: (typeof definitions)[number]["name"] | (string & {}),
+) {
+  return commands.find((c) => c.builder.name === name);
+}
 
-  constructor(options: DiscordInteraction.Option[]) {
-    this._options = options;
-  }
+/**
+ * Runs the named command
+ *
+ * @param request
+ * @returns
+ */
+export async function resolveCommand(request: DiscordInteraction.Request) {
+  const command = findCommand(request.data.name);
 
-  get(name: string) {
-    return this._options.find((x) => x.name === name);
-  }
+  return await command?.resolve(new Interaction(request));
 }

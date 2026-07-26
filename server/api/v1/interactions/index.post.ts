@@ -1,11 +1,9 @@
-import { Command } from "~~/modules/discord-commands/commands";
+import { resolveCommand } from "~~/modules/discord-commands/commands";
 // import { PostHog } from "posthog-node";
 
 export default defineEventHandler(async (event) => {
-  await validateDiscordInteraction(event);
-
-  const body = await readBody<Maybe<DiscordInteraction.Request>>(event);
-  console.log({ body });
+  const body = await validateDiscordInteraction(event);
+  if (import.meta.dev) console.log({ body });
 
   /**
    * ping
@@ -21,12 +19,10 @@ export default defineEventHandler(async (event) => {
    * slash command
    */
   if (body?.type == 2) {
-    const command = Command.find(body.data.name);
-
     return {
       type: 4,
       data: {
-        content: await command?.resolve(body),
+        content: await resolveCommand(body),
       },
     };
   }
