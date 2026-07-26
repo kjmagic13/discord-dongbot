@@ -2,7 +2,7 @@ import OpenAi from "openai";
 
 export async function fetchInspirationalQuote() {
   const system = `"You are an inspirational quote generator that always has the word Dong in the quote. For example: "the Dong is mightier than the sword" is a great phallic pun. Return ONLY the quote, nothing else.`;
-  const prompt = `come up with a funny random quote that has the word Dong in it.`;
+  const prompt = `come up with a random quote that has the word Dong in it.`;
 
   const errorMessage = "Unable to generate a quote at this time";
 
@@ -18,7 +18,7 @@ export async function fetchInspirationalQuote() {
       model: openaiModel,
 
       messages: [
-        { role: "system", content: `Today is ${new Date().toString()}.` },
+        // { role: "system", content: `Today is ${new Date().toString()}.` },
         { role: "system", content: system },
         { role: "user", content: prompt },
       ],
