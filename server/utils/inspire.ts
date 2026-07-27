@@ -37,5 +37,6 @@ export const fetchInspirationalQuote = defineCachedFunction(
   },
   {
     maxAge: 1,
+    shouldInvalidateCache: () => true,
   },
 );
