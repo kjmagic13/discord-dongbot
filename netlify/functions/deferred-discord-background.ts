@@ -1,12 +1,10 @@
 import type { Config } from "@netlify/functions";
-import { $fetch } from "ofetch";
 
 export default async (request: Request) => {
   const body = await request.json();
   const { origin } = new URL(request.url);
 
-  await $fetch(`/api/v1/interactions/deferred`, {
-    baseURL: origin,
+  await fetch(`${origin}/api/v1/interactions/deferred`, {
     method: "POST",
     body,
   });
