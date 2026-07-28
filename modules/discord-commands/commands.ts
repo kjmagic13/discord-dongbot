@@ -97,8 +97,8 @@ export function findCommand(
  * @param request
  * @returns
  */
-export async function resolveCommand(request: DiscordInteraction.Request) {
+export function resolveCommand(request: DiscordInteraction.Request) {
   const command = findCommand(request.data.name);
 
-  return await command?.resolve(new Interaction(request));
+  return command?.resolve(new Interaction(request));
 }
