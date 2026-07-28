@@ -8,6 +8,7 @@ import { Interaction } from "./interaction";
 export type CommandDefinition = {
   name: string;
   description: string;
+  deferred?: boolean;
   options?: readonly CommandOption[];
   resolve: (i: Interaction) => string | Promise<string>;
 };
@@ -27,6 +28,7 @@ type CommandOption = (options: {
 export function buildSlashCommand({
   name,
   description,
+  deferred,
   options,
   resolve,
 }: CommandDefinition) {
@@ -46,5 +48,5 @@ export function buildSlashCommand({
     option({ builder, mentionable });
   }
 
-  return { builder, resolve };
+  return { builder, resolve, deferred };
 }

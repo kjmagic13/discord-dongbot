@@ -1,5 +1,7 @@
-import { resolveCommand } from "~~/modules/discord-commands/commands";
-import { Routes } from "discord.js";
+import {
+  findCommand,
+  resolveCommand,
+} from "~~/modules/discord-commands/commands";
 // import { PostHog } from "posthog-node";
 
 export default defineEventHandler(async (event) => {
@@ -9,7 +11,7 @@ export default defineEventHandler(async (event) => {
   /**
    * ping
    */
-  if (body?.type == 1) {
+  if (body.type == 1) {
     console.log("pong");
     return {
       type: 1,
@@ -19,21 +21,13 @@ export default defineEventHandler(async (event) => {
   /**
    * slash command
    */
-  if (body?.type == 2) {
-    const content = resolveCommand(body);
+  if (body.type == 2) {
+    const command = findCommand(body.data.name);
 
-    if (content instanceof Promise) {
-      queueMicrotask(async () => {
-        const client = useDiscordRestClient();
-
-        client.patch(
-          Routes.webhookMessage(body.application_id, body.token, "@original"),
-          {
-            body: {
-              content: await content,
-            },
-          },
-        );
+    if (command?.deferred) {
+      $fetch(`/api/v1/interactions/deferred`, {
+        method: "POST",
+        body,
       });
 
       return {
@@ -44,7 +38,7 @@ export default defineEventHandler(async (event) => {
     return {
       type: 4,
       data: {
-        content,
+        content: resolveCommand(body),
       },
     };
   }

@@ -66,6 +66,7 @@ const definitions = [
   {
     name: "inspire",
     description: "Replies with an inspirational quote",
+    deferred: true,
     options: [({ mentionable }) => mentionable({ required: false })],
     resolve: async (i) => {
       const quote = await fetchInspirationalQuote();

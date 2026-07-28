@@ -2,7 +2,7 @@ import { verifyKey } from "discord-interactions";
 import { H3Event } from "h3";
 
 export async function validateDiscordInteraction<
-  T = Maybe<DiscordInteraction.Request>,
+  T = DiscordInteraction.Request,
 >(event: H3Event) {
   const { discordPublicKey } = useRuntimeConfig();
 
