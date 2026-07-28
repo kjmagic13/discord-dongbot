@@ -6,7 +6,7 @@ export default async (request: Request) => {
 
   await fetch(`${origin}/api/v1/interactions/deferred`, {
     method: "POST",
-    body,
+    body: JSON.stringify(body),
   });
 };
 
