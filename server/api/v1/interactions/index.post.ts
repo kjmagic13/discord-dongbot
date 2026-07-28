@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     const command = findCommand(body.data.name);
 
     if (command?.deferred) {
-      $fetch(`/api/v1/interactions/deferred`, {
+      await $fetch("/.netlify/functions/deferred-discord-background", {
         method: "POST",
         body,
       });
